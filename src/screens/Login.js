@@ -11,6 +11,33 @@ import {
 } from "react-native";
 
 export default function Login() {
+  const [state, setState] = React.useState({ email: "", password: "" });
+
+  const login = () => {
+    if (validate()) {
+      alert("Success");
+    }
+  };
+
+  const validate = () => {
+    let { email, password } = state;
+    if (!email) {
+      alert("Please enter email");
+      return false;
+    } else if (!validateEmail(email)) {
+      alert("Please enter valid email");
+      return false;
+    } else if (!password) {
+      alert("Please enter password");
+      return false;
+    } else return true;
+  };
+
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -31,16 +58,26 @@ export default function Login() {
       <View style={styles.circle}>
         <Text style={styles.innerText}>x</Text>
       </View>
-      <TextInput placeholder="Email:" style={styles.input}></TextInput>
+      <TextInput
+        placeholder="Email:"
+        value={state.email}
+        onChangeText={(e) => setState({ ...state, email: e })}
+        type="text"
+        name="email"
+        style={styles.input}
+      ></TextInput>
       <TextInput
         placeholder="Password:"
         secureTextEntry={true}
         keyboardType="numeric"
         maxLength={8}
+        value={state.password}
+        onChangeText={(e) => setState({ ...state, password: e })}
+        blurOnSubmit={true}
         style={styles.input}
       ></TextInput>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>SIGN UP</Text>
+      <TouchableOpacity style={styles.button} onPress={login}>
+        <Text style={styles.buttonText}>Signup</Text>
       </TouchableOpacity>
       <Text style={styles.bottom}>New Account?</Text>
     </View>
