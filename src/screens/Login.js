@@ -12,15 +12,10 @@ import {
 
 export default function Login() {
   return (
-    <View style={{ flex: 1, backgroundColor: "#e0ebeb" }}>
+    <View style={styles.container}>
       <ImageBackground
         source={require("../../assets/splash.jpg")}
-        style={{
-          // flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          height: 300,
-        }}
+        style={styles.backImage}
       >
         <Text style={styles.text}>PLANTS</Text>
         <Text style={styles.base}>We help you to live</Text>
@@ -34,30 +29,38 @@ export default function Login() {
         translucent={false}
       />
       <View style={styles.circle}>
-        <Text style={{ fontSize: 30, textAlign: "center" }}>x</Text>
+        <Text style={styles.innerText}>x</Text>
       </View>
       <TextInput placeholder="Email:" style={styles.input}></TextInput>
-      <TextInput placeholder="Password:" style={styles.input}></TextInput>
+      <TextInput
+        placeholder="Password:"
+        secureTextEntry={true}
+        keyboardType="numeric"
+        maxLength={8}
+        style={styles.input}
+      ></TextInput>
       <TouchableOpacity style={styles.button}>
-        <Text style={{ fontWeight: "500", textAlign: "center", fontSize: 20 }}>
-          SIGN UP
-        </Text>
+        <Text style={styles.buttonText}>SIGN UP</Text>
       </TouchableOpacity>
       <Text style={styles.bottom}>New Account?</Text>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#e0ebeb" },
+  backImage: { justifyContent: "center", alignItems: "center", height: 300 },
   text: {
     color: "white",
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: "bold",
+    fontFamily: "Cochin",
     padding: 30,
   },
   base: {
-    fontSize: 20,
+    fontSize: 25,
     color: "white",
-    fontWeight: "500",
+    fontFamily: "Cochin",
+    fontWeight: "700",
   },
   circle: {
     width: 40,
@@ -65,10 +68,8 @@ const styles = StyleSheet.create({
     borderRadius: 40 / 2,
     backgroundColor: "white",
     marginHorizontal: 170,
-
-    // justifyContent:1 "center",
-    // alignItems: "center",
   },
+  innerText: { fontSize: 30, textAlign: "center" },
   input: {
     fontWeight: "500",
     fontSize: 25,
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     borderColor: "#eff5f5",
     margin: 10,
   },
+  buttonText: { fontWeight: "500", textAlign: "center", fontSize: 20 },
   bottom: {
     alignSelf: "center",
     textDecorationLine: "underline",
