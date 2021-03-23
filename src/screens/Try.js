@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -9,31 +9,37 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useFormik } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string()
-    .min(2, "Too Short!")
-    .max(10, "Too Long!")
-    .required("Required"),
-});
 export default function Login() {
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    values,
-    errors,
-    touched,
-  } = useFormik({
-    validationSchema: LoginSchema,
-    initialValues: { email: "", password: "" },
-    onSubmit: (values) =>
-      alert(`Email: ${values.email}, Password: ${values.password}`),
-  });
-  const password = useRef(null);
+  const [state, setState] = React.useState({ email: "", password: "" });
+
+  const login = () => {
+    if (validate()) {
+      alert("Success");
+    }
+  };
+
+  const validate = () => {
+    let { email, password } = state;
+    if (!email) {
+      alert("Please enter email");
+      return false;
+    } else if (!validateEmail(email)) {
+      alert("Please enter valid email");
+      return false;
+    } else if (!password) {
+      alert("Please enter password");
+      return false;
+    } else return true;
+  };
+
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -55,39 +61,25 @@ export default function Login() {
         <Text style={styles.innerText}>x</Text>
       </View>
       <TextInput
-        placeholder="Enter your email"
-        autoCompleteType="email"
-        keyboardType="email-address"
-        keyboardAppearance="dark"
-        returnKeyType="next"
-        returnKeyLabel="next"
-        onChangeText={handleChange("email")}
-        onBlur={handleBlur("email")}
-        error={errors.email}
-        touched={touched.email}
-        onSubmitEditing={() => password.current?.focus()}
+        placeholder="Email:"
+        value={state.email}
+        onChangeText={(e) => setState({ ...state, email: e })}
+        type="text"
+        name="email"
         style={styles.input}
       ></TextInput>
       <TextInput
-        ref={password}
-        placeholder="Enter your password"
-        secureTextEntry
-        autoCompleteType="password"
-        autoCapitalize="none"
-        keyboardAppearance="dark"
-        returnKeyType="go"
-        returnKeyLabel="go"
-        onChangeText={handleChange("password")}
-        onBlur={handleBlur("password")}
-        error={errors.password}
-        touched={touched.password}
-        onSubmitEditing={() => handleSubmit()}
+        placeholder="Password:"
+        secureTextEntry={true}
+        keyboardType="numeric"
+        maxLength={8}
+        value={state.password}
+        onChangeText={(e) => setState({ ...state, password: e })}
+        blurOnSubmit={true}
         style={styles.input}
       ></TextInput>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText} onPress={handleSubmit}>
-          Signup
-        </Text>
+      <TouchableOpacity style={styles.button} onPress={login}>
+        <Text style={styles.buttonText}>Signup</Text>
       </TouchableOpacity>
       <Text style={styles.bottom}>New Account?</Text>
     </View>

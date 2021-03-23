@@ -1,6 +1,5 @@
 import React from "react";
 import Login from "../screens/Login";
-// import * as SplashScreen from "expo-splash-screen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SplashScreen } from "../screens/SplashScreen";
 
