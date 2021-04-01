@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground, StyleSheet } from "react-native";
 
 export default function SplashScreen({ navigation }) {
   useEffect(() => {
@@ -9,11 +9,9 @@ export default function SplashScreen({ navigation }) {
   });
   return (
     <ImageBackground
-      source={require("./assets/photo.jpeg")}
+      source={require("../screens/assets/photo.jpeg")}
       style={styles.photo}
-    >
-      <Text style={styles.title}>PLANTS</Text>
-    </ImageBackground>
+    ></ImageBackground>
   );
 }
 const styles = StyleSheet.create({

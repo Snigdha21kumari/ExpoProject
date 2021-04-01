@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { Component, Fragment } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,90 +7,88 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-  Image,
+  Alert,
 } from "react-native";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-
-const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string()
-    .min(2, "Too Short!")
-    .max(10, "Too Long!")
-    .required("Required"),
-});
-export default function Login() {
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    values,
-    errors,
-    touched,
-  } = useFormik({
-    validationSchema: LoginSchema,
-    initialValues: { email: "", password: "" },
-    onSubmit: (values) =>
-      alert(`Email: ${values.email}, Password: ${values.password}`),
-  });
-  const password = useRef(null);
+import * as yup from "yup";
+import { Formik } from "formik";
+export default function Login(props) {
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../../assets/splash.jpg")}
-        style={styles.backImage}
-      >
-        <Text style={styles.text}>PLANTS</Text>
-        <Text style={styles.base}>We help you to live</Text>
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      onSubmit={(values) => props.navigation.navigate("List")}
+      validationSchema={yup.object().shape({
+        email: yup.string().email().required(),
+        password: yup.string().min(5).required(),
+      })}
+    >
+      {({
+        values,
+        handleChange,
+        errors,
+        setFieldTouched,
+        touched,
+        isValid,
+        handleSubmit,
+        navigation,
+      }) => (
+        <Fragment>
+          <View style={styles.container}>
+            <ImageBackground
+              source={require("../../assets/splash.jpg")}
+              style={styles.backImage}
+            >
+              <Text style={styles.text}>PLANTS</Text>
+              <Text style={styles.base}>We help you to live</Text>
 
-        <Text style={styles.base}>feel free life from stress</Text>
-      </ImageBackground>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="white"
-        translucent={false}
-      />
-      <View style={styles.circle}>
-        <Text style={styles.innerText}>x</Text>
-      </View>
-      <TextInput
-        placeholder="Enter your email"
-        autoCompleteType="email"
-        keyboardType="email-address"
-        keyboardAppearance="dark"
-        returnKeyType="next"
-        returnKeyLabel="next"
-        onChangeText={handleChange("email")}
-        onBlur={handleBlur("email")}
-        error={errors.email}
-        touched={touched.email}
-        onSubmitEditing={() => password.current?.focus()}
-        style={styles.input}
-      ></TextInput>
-      <TextInput
-        ref={password}
-        placeholder="Enter your password"
-        secureTextEntry
-        autoCompleteType="password"
-        autoCapitalize="none"
-        keyboardAppearance="dark"
-        returnKeyType="go"
-        returnKeyLabel="go"
-        onChangeText={handleChange("password")}
-        onBlur={handleBlur("password")}
-        error={errors.password}
-        touched={touched.password}
-        onSubmitEditing={() => handleSubmit()}
-        style={styles.input}
-      ></TextInput>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText} onPress={handleSubmit}>
-          Signup
-        </Text>
-      </TouchableOpacity>
-      <Text style={styles.bottom}>New Account?</Text>
-    </View>
+              <Text style={styles.base}>feel free life from stress</Text>
+            </ImageBackground>
+            <StatusBar
+              barStyle="light-content"
+              hidden={false}
+              backgroundColor="white"
+              translucent={false}
+            />
+
+            <TextInput
+              value={values.email}
+              onChangeText={handleChange("email")}
+              onBlur={() => setFieldTouched("email")}
+              placeholder="E-mail"
+              style={styles.input}
+            />
+            {touched.email && errors.email && (
+              <Text style={{ fontSize: 10, color: "red" }}>{errors.email}</Text>
+            )}
+            <TextInput
+              value={values.password}
+              onChangeText={handleChange("password")}
+              placeholder="Password"
+              onBlur={() => setFieldTouched("password")}
+              secureTextEntry={true}
+              style={styles.input}
+            />
+
+            {touched.password && errors.password && (
+              <Text style={{ fontSize: 10, color: "red" }}>
+                {errors.password}
+              </Text>
+            )}
+            <TouchableOpacity
+              style={styles.button}
+              disabled={!isValid}
+              onPress={handleSubmit}
+              // onPress={() => this.props.navigation.navigate("List")}
+            >
+              <Text style={styles.buttonText}>Signup</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("List")}>
+              <Text>Goto next</Text>
+            </TouchableOpacity>
+            <Text style={styles.bottom}>New Account?</Text>
+          </View>
+        </Fragment>
+      )}
+    </Formik>
   );
 }
 const styles = StyleSheet.create({
@@ -109,14 +107,7 @@ const styles = StyleSheet.create({
     fontFamily: "Cochin",
     fontWeight: "700",
   },
-  circle: {
-    width: 40,
-    height: 40,
-    borderRadius: 40 / 2,
-    backgroundColor: "white",
-    marginHorizontal: 170,
-  },
-  innerText: { fontSize: 30, textAlign: "center" },
+
   input: {
     fontWeight: "500",
     fontSize: 25,
