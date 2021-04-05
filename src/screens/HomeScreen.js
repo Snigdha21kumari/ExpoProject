@@ -11,15 +11,6 @@ import {
 } from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 export default function List(props) {
-  const [loading, setLoading] = useState(false);
-
-  const startLoading = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  };
-
   const [state, setState] = useState({
     dataContainer: [],
     images: [
@@ -70,29 +61,23 @@ export default function List(props) {
     <View style={{ flex: 1 }}>
       <Text style={styles.text}>Music List</Text>
       <View>
-        {loading ? (
-          <ActivityIndicator visible={loading} />
-        ) : (
-          <>
-            <SliderBox
-              images={state.images}
-              sliderBoxHeight={200}
-              onCurrentImagePressed={(index, startLoading) =>
-                console.warn(`image ${index} pressed`)
-              }
-              dotColor="blue"
-              inactiveDotColor="white"
-              dotStyle={{
-                width: 8,
-                height: 8,
-                borderRadius: 4,
-                marginHorizontal: 5,
-                padding: 0,
-                margin: 0,
-              }}
-            />
-          </>
-        )}
+        <SliderBox
+          images={state.images}
+          sliderBoxHeight={200}
+          onCurrentImagePressed={(index, startLoading) =>
+            console.warn(`image ${index} pressed`)
+          }
+          dotColor="blue"
+          inactiveDotColor="white"
+          dotStyle={{
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            marginHorizontal: 5,
+            padding: 0,
+            margin: 0,
+          }}
+        />
       </View>
 
       <FlatList
