@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 export default function List(props) {
@@ -20,10 +20,15 @@ export default function List(props) {
     ],
   });
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://itunes.apple.com/search?term=Michael+jackson")
       .then((response) => {
+        setLoading(false);
+
         console.warn("data ==", response.data.results.artworkUrl60);
         setState({
           ...state,
@@ -31,7 +36,10 @@ export default function List(props) {
           imageData: response.data.results.artworkUrl100,
         });
       })
+
       .catch((error) => {
+        setLoading(false);
+
         console.log(error);
       });
   }, []);
@@ -49,6 +57,7 @@ export default function List(props) {
         <TouchableOpacity style={styles.imgWrap}>
           <Image source={{ uri: item.artworkUrl60 }} style={styles.image} />
         </TouchableOpacity>
+
         <View style={styles.artistNameWrap}>
           <Text> {item.artistName}</Text>
           <Text> {item.primaryGenreName}</Text>
@@ -64,27 +73,30 @@ export default function List(props) {
         <SliderBox
           images={state.images}
           sliderBoxHeight={200}
-          onCurrentImagePressed={(index, startLoading) =>
+          onCurrentImagePressed={(index) =>
             console.warn(`image ${index} pressed`)
           }
           dotColor="blue"
           inactiveDotColor="white"
-          dotStyle={{
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            marginHorizontal: 5,
-            padding: 0,
-            margin: 0,
-          }}
+          dotStyle={styles.point}
         />
       </View>
-
-      <FlatList
-        data={state.dataContainer}
-        renderItem={(item) => renderItem(item)}
-        keyExtractor={(item, index) => item.artistId}
-      />
+      {loading ? (
+        <ActivityIndicator
+          visible={loading}
+          color={"blue"}
+          size={35}
+          style={styles.loadingcontainer}
+        />
+      ) : (
+        <>
+          <FlatList
+            data={state.dataContainer}
+            renderItem={(item) => renderItem(item)}
+            keyExtractor={(item) => item.artistId}
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -111,4 +123,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   image: { height: 50, width: 50, borderRadius: 25 },
+  point: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 5,
+    padding: 0,
+    margin: 0,
+  },
+  loadingcontainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

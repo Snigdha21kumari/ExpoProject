@@ -1,29 +1,30 @@
 import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
+let musicData;
+
 export default function List(props) {
-  const [state, setState] = useState({
-    musicList: props.route.params.musicDetails,
-  });
+  const [musicList] = useState(props.route.params.musicDetails);
+
   return (
     <View style={styles.container}>
       <View style={{ width: "100%", height: 200 }}>
         <Image
-          source={{ uri: state.musicList.artworkUrl100 }}
+          source={{ uri: musicList.artworkUrl100 }}
           style={styles.artphoto}
         />
       </View>
       <View style={styles.textWrap}>
         <Text style={styles.artist}>Artist Name</Text>
-        <Text style={styles.name}>{state.musicList.artistName}</Text>
+        <Text style={styles.name}>{musicList.artistName}</Text>
       </View>
       <View style={styles.textWrap}>
         <Text style={styles.artist}>Genre Name</Text>
-        <Text style={styles.name}>{state.musicList.primaryGenreName}</Text>
+        <Text style={styles.name}>{musicList.primaryGenreName}</Text>
       </View>
       <View style={styles.textWrap}>
         <Text style={styles.artist}>ArtistId</Text>
-        <Text style={styles.name}>{state.musicList.artistId}</Text>
+        <Text style={styles.name}>{musicList.artistId}</Text>
       </View>
     </View>
   );
