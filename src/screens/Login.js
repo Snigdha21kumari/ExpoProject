@@ -15,7 +15,7 @@ export default function Login(props) {
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values) => props.navigation.navigate("List")}
+      onSubmit={(values) => props.navigation.navigate("HomeScreen")}
       validationSchema={yup.object().shape({
         email: yup.string().email().required(),
         password: yup.string().min(5).required(),
@@ -77,13 +77,10 @@ export default function Login(props) {
               style={styles.button}
               disabled={!isValid}
               onPress={handleSubmit}
-              // onPress={() => this.props.navigation.navigate("List")}
             >
               <Text style={styles.buttonText}>Signup</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("List")}>
-              <Text>Goto next</Text>
-            </TouchableOpacity>
+
             <Text style={styles.bottom}>New Account?</Text>
           </View>
         </Fragment>

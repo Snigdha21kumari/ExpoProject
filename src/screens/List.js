@@ -1,126 +1,60 @@
-// import React, { Component } from "react";
-// import { Text, FlatList, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 
-// class List extends Component {
-//   constructor() {
-//     super();
-//     this.state = { data: [] };
-//   }
-//   componentDidMount() {
-//     this.apiCall();
-//   }
-//   async apiCall() {
-//     let resp = await fetch(
-//       "https://itunes.apple.com/search?term=Michael+jackson"
-//     );
-//     let respJson = await resp.json();
-//     // console.warn(respJson);
-//     this.setState({ data: respJson.results });
-//   }
-//   render() {
-//     return (
-//       <SafeAreaView>
-//         <Text
-//           style={{
-//             fontSize: 50,
-//             textAlign: "center",
-//             fontWeight: "bold",
-//             color: "#330033",
-//             textDecorationLine: "underline",
-//           }}
-//         >
-//           {" "}
-//           MUSIC LIST{" "}
-//         </Text>
-//         <FlatList
-//           data={this.state.data}
-//           renderItem={({ item }) => (
-//             <Text
-//               style={{
-//                 fontSize: 25,
-//                 color: "#993399",
-//                 backgroundColor: "#ffccff",
-//                 margin: 14,
-//                 borderBottomColor: "black",
-//                 borderBottomWidth: 1,
-//                 fontFamily: "Helvetica",
-//               }}
-//             >
-//               {item.title}
-//               {item.trackName}:{item.collectionName}
-//             </Text>
-//           )}
-//         />
-//       </SafeAreaView>
-//     );
-//   }
-// }
-// export default List;
-import React, { Component } from "react";
+export default function List(props) {
+  const [state, setState] = useState({
+    musicList: props.route.params.musicDetails,
+  });
+  const [loading, setLoading] = useState(false);
 
-import axios from "axios";
-import { Text, View, Image, FlatList } from "react-native";
-export default class List extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      imageURL: "",
-      dataContainer: [],
-    };
-  }
-  componentDidMount() {
-    axios
-      .get("https://itunes.apple.com/search?term=Michael+jackson")
-      .then((response) => {
-        // console.warn("", JSON.stringify(response.data.results, undefined, 2));
-        this.setState({ dataContainer: response.data.results });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  const startLoading = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  };
 
-  render() {
-    // console.warn("abc", JSON.stringify(this.state.dataContainer, undefined, 2));
-    const { dataContainer } = this.state;
-    return (
-      // <FlatList>
-      <View style={{ flex: 1, margin: 30 }}>
-        <Text
-          style={{
-            color: "orange",
-            fontSize: 30,
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
-          {" "}
-          Music List
-        </Text>
-
-        {dataContainer.map((item) => {
-          // console.warn("item..", item);
-          return (
-            <View>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: "#b35900",
-                  fontWeight: "bold",
-                  fontFamily: "Helvetica",
-                  backgroundColor: "#ffccff",
-                }}
-              >
-                {item.trackName}
-              </Text>
-              <Text style={{ fontSize: 15, color: "#b35900" }}>
-                {item.artistName}
-              </Text>
-            </View>
-          );
-        })}
+  return (
+    <View style={styles.container}>
+      <View style={{ width: "100%", height: 200 }}>
+        <Image
+          source={{ uri: state.musicList.artworkUrl100 }}
+          style={styles.artphoto}
+        />
       </View>
-      // </FlatList>
-    );
-  }
+      <View style={styles.textWrap}>
+        <Text style={styles.artist}>Artist Name</Text>
+        <Text style={styles.name}>{state.musicList.artistName}</Text>
+      </View>
+      <View style={styles.textWrap}>
+        <Text style={styles.artist}>Genre Name</Text>
+        <Text style={styles.name}>{state.musicList.primaryGenreName}</Text>
+      </View>
+      <View style={styles.textWrap}>
+        <Text style={styles.artist}>ArtistId</Text>
+        <Text style={styles.name}>{state.musicList.artistId}</Text>
+      </View>
+    </View>
+  );
 }
+const styles = StyleSheet.create({
+  container: {
+    // padding: 20,
+    flex: 1,
+    // alignItems: "center",
+  },
+  artphoto: {
+    height: "100%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  name: { fontSize: 20, color: "#6600ff" },
+  textWrap: { margin: 10 },
+  artist: {
+    fontSize: 20,
+    color: "#ff6600",
+    fontWeight: "bold",
+  },
+  name: { fontSize: 15 },
+});
