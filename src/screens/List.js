@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-
-let musicData;
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function List(props) {
-  const [musicList] = useState(props.route.params.musicDetails);
+  const musicList =
+    props.route.params && props.route.params.musicDetails
+      ? props.route.params.musicDetails
+      : null;
 
   return (
     <View style={styles.container}>
@@ -26,6 +27,13 @@ export default function List(props) {
         <Text style={styles.artist}>ArtistId</Text>
         <Text style={styles.name}>{musicList.artistId}</Text>
       </View>
+      <Text style={styles.line}> Added to Favorites</Text>
+      <TouchableOpacity style={styles.box}>
+        <Image
+          source={require("../../assets/favourite.png")}
+          style={styles.heart}
+        ></Image>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -47,4 +55,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   name: { fontSize: 15 },
+  line: { fontSize: 15, textAlign: "center" },
+  heart: {
+    height: 20,
+    width: 20,
+  },
+  box: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

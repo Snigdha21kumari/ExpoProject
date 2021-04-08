@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Text,
@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SliderBox } from "react-native-image-slider-box";
 export default function List(props) {
@@ -32,8 +33,11 @@ export default function List(props) {
         console.warn("data ==", response.data.results.artworkUrl60);
         setState({
           ...state,
-          dataContainer: response.data.results,
-          imageData: response.data.results.artworkUrl100,
+          dataContainer: response.data.results ? (
+            response.data.results
+          ) : (
+            <Text>Nodata found</Text>
+          ),
         });
       })
 
@@ -68,8 +72,16 @@ export default function List(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={styles.text}>Music List</Text>
       <View>
+        <TouchableOpacity
+          onPress={() => props.navigation.toggleDrawer()}
+          style={styles.listContainer}
+        >
+          <Image
+            source={require("../../assets/list.png")}
+            style={styles.list}
+          />
+        </TouchableOpacity>
         <SliderBox
           images={state.images}
           sliderBoxHeight={200}
@@ -102,6 +114,8 @@ export default function List(props) {
 }
 
 const styles = StyleSheet.create({
+  listContainer: { padding: 10 },
+  list: { height: 30, width: 30 },
   flatListwrap: {
     flexDirection: "row",
     alignItems: "center",
@@ -116,12 +130,7 @@ const styles = StyleSheet.create({
   artistNameWrap: {
     paddingHorizontal: 30,
   },
-  text: {
-    color: "orange",
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
+
   image: { height: 50, width: 50, borderRadius: 25 },
   point: {
     width: 8,
