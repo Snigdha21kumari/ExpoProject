@@ -6,7 +6,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomDrawer from "../common/CustomDrawer";
 
-import { SplashScreen, List, HomeScreen } from "../screens";
+import { SplashScreen, List, HomeScreen, Cart } from "../screens";
 
 const Stack = createStackNavigator();
 const drawer = createDrawerNavigator();
@@ -67,13 +67,28 @@ function TabScreen() {
           ),
         }}
       />
+      <Tab.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View>
+              <Image
+                source={require("../../assets/basket.png")}
+                style={{ width: 25, height: 25, tintColor: color }}
+                tintColor={color}
+              />
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
 
 const Navigation = (props) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Cart">
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
@@ -92,6 +107,12 @@ const Navigation = (props) => {
       <Stack.Screen
         name="HomeScreen"
         component={DrawerScreen}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
