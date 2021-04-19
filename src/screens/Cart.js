@@ -1,52 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   FlatList,
+  TouchableOpacity,
+  ImageBackground,
 } from "react-native";
-import { four, two } from "../../assets";
 import Header from "../common/Header";
+import { SliderBox, CommonText, Button, Footer, Link } from "../common";
+import { data, textList } from "../screens/data";
 
-export default function Cart() {
-  const [state, setState] = useState({
-    cartItem: [
-      { fruitName: "Fresh Cherry", image: four },
-      { fruitName: "Japan Cherry", image: two },
-      { fruitName: "Fresh Cherry", image: four },
-      { fruitName: "Japan Cherry", image: two },
-    ],
-  });
-
+function Cart() {
   const renderItem = ({ item }) => {
     return (
-      <View>
-        <Image source={item.image} style={styles.bunchImage}></Image>
+      <View style={styles.big}>
+        <ImageBackground source={item.image} style={styles.bunchImage}>
+          <View style={styles.imagebackground}>
+            <Image
+              source={require("../../assets/blankheart.png")}
+              style={styles.heart}
+            ></Image>
+          </View>
+        </ImageBackground>
         <Text style={styles.text}>{item.fruitName}</Text>
       </View>
     );
   };
   return (
-    <View style={styles.container}>
-      <Header />
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Image
-          source={require("../../assets/two.png")}
-          style={styles.backImage}
-        />
+    <View style={{ flex: 1 }}>
+      <View style={styles.head}>
+        <Header />
+        <SliderBox />
       </View>
       <View style={styles.bigContainer}>
-        <Text style={styles.first}>Australian Cherry</Text>
+        <CommonText label={data.textList.ac} />
         <View style={styles.box}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.second}>$5.6 </Text>
-            <Text style={styles.twice}>$7.2 </Text>
-          </View>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.third}> Buy</Text>
-          </TouchableOpacity>
+          <CommonText label="$56" style={{ color: "green" }} striketext="$72" />
+          <Button label={data.textList.btn} style={styles.button} />
         </View>
         <View style={styles.line}>
           <View style={styles.row}>
@@ -54,77 +46,55 @@ export default function Cart() {
               source={require("../../assets/copy.png")}
               style={styles.small}
             />
-            <Text style={styles.feature}>ABC</Text>
+            <CommonText label={data.textList.abc} style={{ color: "black" }} />
           </View>
           <View style={styles.row}>
             <Image
               source={require("../../assets/copy.png")}
               style={styles.small}
             />
-            <Text style={styles.feature}>Quality</Text>
+            <CommonText label={data.textList.qa} style={{ color: "black" }} />
           </View>
           <View style={styles.row}>
             <Image
               source={require("../../assets/copy.png")}
               style={styles.small}
             />
-            <Text style={styles.feature}>Fresh</Text>
+            <CommonText label="Fresh" style={{ color: "black" }} />
           </View>
         </View>
-        <Text style={styles.lorem}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et
-        </Text>
-        <View style={styles.paragraphEnd}>
-          <Text style={styles.lorem}>dolore magna aliqua. Ut enim ad m</Text>
-          <Text style={styles.last}>...View more</Text>
-        </View>
+
+        <Link />
+
         <View style={styles.middle}>
           <Image
             source={require("../../assets/favourite.png")}
             style={styles.like}
-          ></Image>
+          />
 
-          <TouchableOpacity style={styles.medium}>
-            <Text style={styles.fifth}>Add to Cart</Text>
-          </TouchableOpacity>
+          <Button label="Add To cart" style={styles.medium} />
         </View>
-        <View style={{ paddingVertical: 10 }}>
-          <Text style={styles.sixth}>Similar Products</Text>
-          <View style={{ width: "100%", alignItems: "center" }}>
-            <View style={styles.tagView}>
-              <FlatList
-                data={state.cartItem}
-                // numColumns={2}
-                renderItem={(item) => renderItem(item)}
-                horizontal
-              />
-            </View>
-          </View>
-        </View>
+        <CommonText label="Similar Products" />
+        <FlatList
+          data={data.cartItem}
+          renderItem={(item) => renderItem(item)}
+          horizontal
+        />
       </View>
       <View style={styles.back}>
-        <View style={styles.bottom}>
+        <View style={styles.layout}>
           <Text style={styles.total}>$11.6</Text>
-          <View style={styles.side}>
-            <Text style={styles.total}>CHECKOUT</Text>
-            <Image
-              source={require("../../assets/arrow.png")}
-              style={styles.photo}
-            />
+          <View style={styles.last}>
+            <Button label={data.textList.Check} style={styles.total} />
+            <Footer />
           </View>
         </View>
       </View>
     </View>
   );
 }
+export default Cart;
 const styles = StyleSheet.create({
-  container: { backgroundColor: "#99ffeb", flex: 1 },
-  backImage: {
-    height: 250,
-    width: 200,
-    backgroundColor: "transparent",
-  },
   bigContainer: {
     backgroundColor: "white",
     borderRadius: 25,
@@ -138,19 +108,14 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: "center",
   },
-  first: { fontSize: 20, fontWeight: "bold", padding: 10 },
-  second: { fontSize: 20, color: "#00e673", fontWeight: "bold" },
-  twice: {
-    fontSize: 20,
-    color: "grey",
-    textDecorationLine: "line-through",
-    textDecorationStyle: "solid",
+  small: {
+    height: 20,
+    width: 20,
+    backgroundColor: "#00b300",
+    paddingHorizontal: 10,
   },
-  third: { color: "white", fontWeight: "bold", fontSize: 20 },
-  feature: { fontWeight: "bold", fontSize: 15 },
-  small: { height: 20, width: 20, backgroundColor: "#00b300" },
   box: { flexDirection: "row", justifyContent: "space-between", padding: 5 },
-  line: { flexDirection: "row", justifyContent: "space-around", padding: 10 },
+  line: { flexDirection: "row", justifyContent: "space-between", padding: 10 },
   row: { flexDirection: "row" },
   middle: {
     flexDirection: "row",
@@ -167,57 +132,50 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
   },
-  lorem: { color: "#527a7a", fontSize: 15 },
-  last: { color: "#00e673", fontWeight: "bold" },
+  lorem: { color: "grey", fontSize: 14 },
+  last: { color: "#00e673", fontSize: 15 },
   paragraphEnd: { flexDirection: "row" },
-  fifth: {
-    color: "white",
-    fontSize: 20,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  sixth: { fontSize: 20, fontWeight: "bold", paddingVertical: 10 },
   bunchImage: {
-    height: 100,
-    width: 150,
+    height: 180,
+    width: 170,
     borderWidth: 2,
     borderColor: "#f0f5f5",
     borderRadius: 20,
+    alignItems: "flex-start",
   },
-  cards: { flexWrap: "wrap" },
-
-  text: { fontWeight: "bold" },
-  tagView: {
-    flexDirection: "row",
-    padding: 10,
-  },
+  text: { fontWeight: "bold", fontSize: 15 },
   back: {
     backgroundColor: "white",
-    height: 100,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "white",
-    justifyContent: "center",
+    borderColor: "grey",
   },
-  bottom: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#00b300",
-    alignItems: "center",
-    padding: 10,
-    borderRadius: 10,
-  },
+
   total: {
     color: "white",
     fontSize: 25,
     fontWeight: "bold",
+    paddingHorizontal: 20,
   },
-  side: { flexDirection: "row" },
-  photo: {
+  layout: {
+    backgroundColor: "#00b300",
+    height: 50,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  heart: { height: 20, width: 20 },
+  imagebackground: {
+    backgroundColor: "#D8D8D8",
     height: 30,
     width: 30,
-    padding: 10,
-    tintColor: "white",
     justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    margin: 10,
+    alignSelf: "flex-end",
   },
+  big: { paddingHorizontal: 10, paddingVertical: 10 },
+  head: { backgroundColor: "#99ffeb" },
+  last: { flexDirection: "row", padding: 20 },
 });
